@@ -7,26 +7,30 @@ temps = [18, 19, 21, 20, 22, 28, 30, 27,
          15, 16, 18, 17, 25, 24, 26, 10, 12, 11, 13, 12]
 
 stable_temps = []
+stable_start = 0
 
-stable_start = None
-stable_end = None
+# В начале отрезок состоит только из первого измерения
+min_temp = temps[0]
+max_temp = temps[0]
 
-ind = 0
-next_ind = 1
+for ind in range(1, len(temps)):
+    # Обновляем минимум / максимум отрезка с учетом текущей температуры
+    new_min = min(min_temp, temps[ind])
+    new_max = max(max_temp, temps[ind])
 
-for t in temps:
-    if next_ind < len(temps) and abs(temps[next_ind] - t) <= 4:
-        if stable_start is None:
-            stable_start = ind
-        stable_end = next_ind
-        ind += 1
-        next_ind += 1
+    # Если разница > 4, то текущая температура начинает новый отрезок
+    if new_max - new_min > 4:
+        if ind - stable_start >= 3:
+            stable_temps.append(temps[stable_start:ind])
+        stable_start = ind
+        min_temp = max_temp = temps[ind]
+    # Если разница <= 4, то текущая температура продолжает текущий отрезок
     else:
-        if stable_start is not None:
-            stable_temps.append(temps[stable_start:stable_end+1])
-        stable_start = None
-        stable_end = None
-        ind += 1
-        next_ind += 1
+        min_temp = new_min
+        max_temp = new_max
+
+# После цикла проверяем, нужно ли добавить последний отрезок
+if len(temps) - stable_start >= 3:
+    stable_temps.append(temps[stable_start:])
 
 print(stable_temps)
