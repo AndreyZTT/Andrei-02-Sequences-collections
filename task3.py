@@ -11,9 +11,7 @@ countries = {
     "ES": "Spain"
 }
 
-codes = {}
+codes = {name: code for code, name in countries.items()}
 
-for pair in countries.items():
-    codes[pair[1]] = pair[0]
 
 print(codes)

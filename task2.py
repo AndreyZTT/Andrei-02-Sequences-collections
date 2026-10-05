@@ -16,7 +16,7 @@ split_text = text.split()
 polyndromes = []
 
 for word in split_text:
-    word = word.strip("\n., ").lower()
+    word = word.strip("\n., !?#&*()@$%^*").lower()
     if word == word[::-1] and len(word) > 2:
         if word not in polyndromes:
             polyndromes.append(word)
